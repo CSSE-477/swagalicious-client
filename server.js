@@ -65,7 +65,76 @@ app.post("/post", function(req, res) {
     request.end();
 });
 
-app.get('/testGet', function(req, res) {
+app.post("/put", function(req, res) {
+
+    console.log(req.body.body.length);
+    var options = {
+        host: 'localhost',
+        port: '8080',
+        path: req.body.destination,
+        rejectUnauthorized: false,
+        method: 'PUT',
+        headers: {
+            "Content-Type":"application/json",
+            "Content-Length":"" + req.body.body.length
+        }
+    };
+
+    var request = https.request(options, (response) => {
+        console.log('statusCode:', response.statusCode);
+        console.log('headers:', response.headers);
+        var str = '';
+        response.on('data', (d) => {
+            str += d;
+        });
+        response.on('end', () => {
+            console.log(str);
+            res.send(str);
+        });
+    });
+
+    request.on('error', (e) => {
+        console.error(e);
+    });
+    request.write(req.body.body);
+    request.end();
+});
+
+app.post("/delete", function(req, res) {
+
+    console.log("delete");
+    var options = {
+        host: 'localhost',
+        port: '8080',
+        path: req.body.destination,
+        rejectUnauthorized: false,
+        method: 'DELETE',
+        headers: {
+            "Content-Type":"application/json"
+        }
+    };
+
+    var request = https.request(options, (response) => {
+        console.log('statusCode:', response.statusCode);
+        console.log('headers:', response.headers);
+        var str = '';
+        response.on('data', (d) => {
+            str += d;
+        });
+        response.on('end', () => {
+            console.log(str);
+            res.send(str);
+        });
+    });
+
+    request.on('error', (e) => {
+        console.error(e);
+    });
+
+    request.end();
+});
+
+app.get('/get', function(req, res) {
 
     console.log("got to endpoint");
 
