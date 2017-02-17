@@ -6,7 +6,7 @@ module.exports = {
   entry: [
       'webpack-hot-middleware/client.js',
       './src/index.js',
-      './src/app.css'
+      './src/app.scss'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -25,6 +25,10 @@ module: {
     {
         test: /\.css$/,
         loader: 'style-loader!css-loader'
+    },
+    {
+        test: /\.scss$/,
+        loaders: [ 'style', 'css', 'sass' ]
     },
     {
         test: /\.(jpe?g|png|gif|svg)$/i,

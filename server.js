@@ -26,6 +26,8 @@ app.all('/', function(req, res, next) {
     next();
 });
 
+var hostname = "477-06.csse.rose-hulman.edu";
+
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -34,7 +36,7 @@ app.post("/post", function(req, res) {
 
     console.log(req.body.body.length);
     var options = {
-        host: 'localhost',
+        host: hostname,
         port: '8080',
         path: req.body.destination,
         rejectUnauthorized: false,
@@ -69,7 +71,7 @@ app.post("/put", function(req, res) {
 
     console.log(req.body.body.length);
     var options = {
-        host: 'localhost',
+        host: hostname,
         port: '8080',
         path: req.body.destination,
         rejectUnauthorized: false,
@@ -104,7 +106,7 @@ app.post("/delete", function(req, res) {
 
     console.log("delete");
     var options = {
-        host: 'localhost',
+        host: hostname,
         port: '8080',
         path: req.body.destination,
         rejectUnauthorized: false,
@@ -134,15 +136,17 @@ app.post("/delete", function(req, res) {
     request.end();
 });
 
-app.get('/get', function(req, res) {
-
-    console.log("got to endpoint");
+app.post("/get", function(req, res) {
 
     var options = {
-        host: 'localhost',
+        host: hostname,
         port: '8080',
-        path: '/',
-        rejectUnauthorized: false
+        path: req.body.destination,
+        rejectUnauthorized: false,
+        method: 'GET',
+        headers: {
+            "Content-Type":"application/json"
+        }
     };
 
     var request = https.request(options, (response) => {
@@ -161,6 +165,7 @@ app.get('/get', function(req, res) {
     request.on('error', (e) => {
         console.error(e);
     });
+
     request.end();
 });
 
